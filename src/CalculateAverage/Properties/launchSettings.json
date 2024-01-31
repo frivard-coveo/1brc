@@ -2,7 +2,7 @@
   "profiles": {
     "CalculateAverage": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\dev\\1brc\\data\\measurements-20.txt"
+      "commandLineArgs": "D:\\dev\\1brc\\measurements.txt"
     }
   }
 }

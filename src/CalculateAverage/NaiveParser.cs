@@ -9,11 +9,11 @@ internal class NaiveParser
         this.fileToRead = fileToRead;
     }
 
-    public async ValueTask ParseAsync()
+    public void Parse()
     {
         var data  = new Dictionary<string, TemperatureData>(StringComparer.Ordinal);
 
-        await foreach (var line in File.ReadLinesAsync(fileToRead))
+        foreach (var line in File.ReadLines(fileToRead))
         {
             var parts = line.Split(';');
             if (!data.ContainsKey(parts[0]))
