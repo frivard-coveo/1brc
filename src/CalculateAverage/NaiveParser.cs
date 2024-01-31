@@ -23,10 +23,12 @@ internal class NaiveParser
             data[parts[0]].AddSample(double.Parse(parts[1]));
         }
 
+        Console.Write('{');
         foreach(var entry in data.OrderBy(e => e.Key))
         {
-            Console.WriteLine($"{entry.Key}={entry.Value}");
+            Console.Write($"{entry.Key}={entry.Value}, ");
         }
+        Console.Write('}');
     }
 }
 
