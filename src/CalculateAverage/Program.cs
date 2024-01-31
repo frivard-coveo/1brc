@@ -11,8 +11,8 @@ class Program
             Stopwatch sw = new();
             sw.Start();
             string fileToRead = args[0];
-            var parser = new ByteLinesParser(fileToRead);
-            //var parser = new NaiveParser(fileToRead);
+            //var parser = new ByteLinesParser(fileToRead);
+            var parser = new NaiveParser(fileToRead);
             parser.Parse();
 
             Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");

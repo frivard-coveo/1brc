@@ -1,4 +1,6 @@
-﻿namespace CalculateAverage;
+﻿using System.Diagnostics;
+
+namespace CalculateAverage;
 
 internal class NaiveParser
 {
@@ -11,24 +13,31 @@ internal class NaiveParser
 
     public void Parse()
     {
+        var sw = new Stopwatch();
+        sw.Start();
         var data  = new Dictionary<string, TemperatureData>(StringComparer.Ordinal);
 
         foreach (var line in File.ReadLines(fileToRead))
         {
             var parts = line.Split(';');
-            if (!data.ContainsKey(parts[0]))
+            bool found = data.TryGetValue(parts[0], out var tempData);
+            if(!found)
             {
-                data.Add(parts[0], new TemperatureData());
+                tempData = new TemperatureData();
+                data.Add(parts[0], tempData);
             }
-            data[parts[0]].AddSample(double.Parse(parts[1]));
+            tempData.AddSample(double.Parse(parts[1]));
         }
+        Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");
 
+        sw.Restart();
         Console.Write('{');
         foreach(var entry in data.OrderBy(e => e.Key))
         {
             Console.Write($"{entry.Key}={entry.Value}, ");
         }
-        Console.Write('}');
+        Console.WriteLine('}');
+        Console.WriteLine($"Sorted values in {sw.ElapsedMilliseconds} ms.");
     }
 }
 

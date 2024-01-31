@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CalculateAverage;
 
@@ -17,10 +14,11 @@ internal class ByteLinesParser
 
     public void Parse()
     {
-        var names = new Dictionary<int, string>();
+        var sw = new Stopwatch();
+        sw.Start();
         var data = new Dictionary<int, TemperatureData>();
 
-        using FileStream file = new FileStream(fileToRead, FileMode.Open, FileAccess.Read, FileShare.Read, 4096);
+        using FileStream file = new FileStream(fileToRead, FileMode.Open, FileAccess.Read, FileShare.Read, 1048576);
         byte[] buffer = new byte[256];
         int bytesRead;
 
@@ -39,28 +37,26 @@ internal class ByteLinesParser
             int index = lineSpan.IndexOf((byte)';');
             var identifierSpan = lineSpan.Slice(0, index);
             int hash = GetHash(identifierSpan);
-            if (!names.ContainsKey(hash))
+            if (!data.ContainsKey(hash))
             {
-                names.Add(hash, Encoding.UTF8.GetString(identifierSpan));
+                data.Add(hash, new TemperatureData(Encoding.UTF8.GetString(identifierSpan)));
             }
             int eolIndex = lineSpan.Slice(index+1).IndexOf((byte)'\n');
             var sampleSpan = lineSpan.Slice(index+1, eolIndex);
-            if(!data.ContainsKey(hash))
-            {
-                data.Add(hash, new TemperatureData());
-            }
             data[hash].AddSample(SpanToTemperature(sampleSpan));
             lineStartPosition += index + eolIndex + 2;
         }
 
-        Console.Write('{');
-        foreach (var entry in names.OrderBy(e => e.Value, StringComparer.Ordinal))
-        {
-            var temp = data[entry.Key];
-            Console.Write($"{entry.Value}={temp}, ");
-        }
-        Console.Write('}');
+        Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");
 
+        sw.Restart();
+        Console.Write('{');
+        foreach (var entry in data.OrderBy(e => e.Value.Name, StringComparer.Ordinal))
+        {
+            Console.Write($"{entry.Value}, ");
+        }
+        Console.WriteLine('}');
+        Console.WriteLine($"Sorted values in {sw.ElapsedMilliseconds} ms.");
     }
 
     private int SpanToTemperature(Span<byte> span)
@@ -90,6 +86,7 @@ internal class ByteLinesParser
 
     public record TemperatureData
     {
+        public string Name { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
         public long Sum { get; set; }
@@ -97,8 +94,9 @@ internal class ByteLinesParser
 
         public double Average => Sum / (10.0*Count);
 
-        public TemperatureData()
+        public TemperatureData(string id)
         {
+            Name = id;
             Min = 1000;
             Max = -1000;
             Sum = 0;
@@ -119,6 +117,6 @@ internal class ByteLinesParser
             Count++;
         }
 
-        public override string ToString() => $"{Min/10.0:F1}/{Average:F1}/{Max/10.0:F1}";
+        public override string ToString() => $"{Name}={Min/10.0:F1}/{Average:F1}/{Max/10.0:F1}";
     }
 }
