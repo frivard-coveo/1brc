@@ -12,6 +12,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{C0D9F536-A
 		data\measurements-20.txt = data\measurements-20.txt
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateMeasurements", "src\CreateMeasurements\CreateMeasurements.csproj", "{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8E488D18-324F-431F-9601-0C511DFF98DC}"
+	ProjectSection(SolutionItems) = preProject
+		CreateMeasurements.ps1 = CreateMeasurements.ps1
+		PublishAndRun.ps1 = PublishAndRun.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +30,19 @@ Global
 		{4DAB77F2-B8DC-4347-AA0B-8E2FF1496358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DAB77F2-B8DC-4347-AA0B-8E2FF1496358}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DAB77F2-B8DC-4347-AA0B-8E2FF1496358}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4DAB77F2-B8DC-4347-AA0B-8E2FF1496358} = {326F9EB7-26C0-46FB-9E57-56FCB6928682}
+		{17565FCF-1AEB-4FD6-8D04-73F800DF6F9D} = {326F9EB7-26C0-46FB-9E57-56FCB6928682}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D70414D3-ED3E-484F-AC0F-240415E93200}
 	EndGlobalSection
 EndGlobal
