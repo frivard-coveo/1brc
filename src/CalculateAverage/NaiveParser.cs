@@ -2,7 +2,7 @@
 
 namespace CalculateAverage;
 
-internal class NaiveParser
+internal sealed class NaiveParser
 {
     private readonly string fileToRead;
 
@@ -26,7 +26,7 @@ internal class NaiveParser
                 tempData = new TemperatureData();
                 data.Add(parts[0], tempData);
             }
-            tempData.AddSample(double.Parse(parts[1]));
+            tempData.AddSample(ParseSample(parts[1]));// double.Parse(parts[1]));
         }
         Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");
 
@@ -39,26 +39,48 @@ internal class NaiveParser
         Console.WriteLine('}');
         Console.WriteLine($"Sorted values in {sw.ElapsedMilliseconds} ms.");
     }
+
+    private int ParseSample(string sval)
+    {
+        int l = sval.Length;
+        int i = 0;
+        int mult = 1;
+        int value = 0;
+        if (sval[i] == '-')
+        {
+            mult = -1;
+            ++i;
+        }
+        while(i < l)
+        {
+            if (sval[i] != '.')
+            {
+                value = (10 * value) + (sval[i]-'0');
+            }
+            ++i;
+        }
+        return mult*value;
+    }
 }
 
 public record TemperatureData
 {
-    public double Min { get; set;}
-    public double Max { get; set; }
-    public double Sum { get; set; }
+    public int Min { get; set;}
+    public int Max { get; set; }
+    public long Sum { get; set; }
     public int Count { get; set; }
 
-    public double Average => Sum / Count;
+    public double Average => Sum / (Count*10.0);
 
     public TemperatureData()
     {
-        Min = 100.0;
-        Max = -100.0;
-        Sum = 0.0;
+        Min = 1000;
+        Max = -1000;
+        Sum = 0;
         Count = 0;
     }
 
-    public void AddSample(double value)
+    public void AddSample(int value)
     {
         if (value < Min)
         {
@@ -72,5 +94,5 @@ public record TemperatureData
         Count++;
     }
 
-    public override string ToString() => $"{Min}/{Average:F1}/{Max}";
+    public override string ToString() => $"{Min/10.0:F1}/{Average:F1}/{Max/10.0:F1}";
 }

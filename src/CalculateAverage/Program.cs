@@ -15,7 +15,7 @@ class Program
             var parser = new NaiveParser(fileToRead);
             parser.Parse();
 
-            Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");
+            Console.WriteLine($"Ran whole program in {sw.ElapsedMilliseconds} ms.");
         }
         return 0;
     }
