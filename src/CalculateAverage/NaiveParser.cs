@@ -19,14 +19,16 @@ internal sealed class NaiveParser
 
         foreach (var line in File.ReadLines(fileToRead))
         {
-            var parts = line.Split(';');
-            bool found = data.TryGetValue(parts[0], out var tempData);
+            var lineSpan = line.AsSpan();
+            int idLength = lineSpan.IndexOf(';');
+            string identifier = lineSpan.Slice(0, idLength).ToString();
+            bool found = data.TryGetValue(identifier, out var tempData);
             if(!found)
             {
                 tempData = new TemperatureData();
-                data.Add(parts[0], tempData);
+                data.Add(identifier, tempData);
             }
-            tempData.AddSample(ParseSample(parts[1]));// double.Parse(parts[1]));
+            tempData.AddSample(ParseSample(lineSpan.Slice(idLength+1)));
         }
         Console.WriteLine($"Computed values in {sw.ElapsedMilliseconds} ms.");
 
@@ -40,7 +42,7 @@ internal sealed class NaiveParser
         Console.WriteLine($"Sorted values in {sw.ElapsedMilliseconds} ms.");
     }
 
-    private int ParseSample(string sval)
+    private int ParseSample(ReadOnlySpan<char> sval)
     {
         int l = sval.Length;
         int i = 0;
