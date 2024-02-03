@@ -486,9 +486,7 @@ class Program
                 }
 
                 var station = stations[Random.Shared.Next(stations.Count)];
-                file.Write(station.id);
-                file.Write(";" + station.Measurement());
-                file.Write('\n');
+                file.Write($"{station.id};{station.Measurement():F1}\n");
             }
         }
 
